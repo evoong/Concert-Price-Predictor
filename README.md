@@ -14,7 +14,7 @@ This Concert Price Predictor provides a comprehensive toolkit for analyzing and 
   - Spotify (followers, popularity score, monthly listeners)
   - Instagram (followers)
   - Twitter (followers)
-  - StubHub (favourites count)
+  - StubHub (favorites count)
 
 ### 2. **Intelligent Data Processing**
 - Clean and validate ticket price data
@@ -117,7 +117,7 @@ jupyter notebook embrace_tracker.ipynb
 
 #### StubHub Tracker
 ```sh
-# Open stubhub_tracker.ipynb  
+# Open stubhub_tracker.ipynb
 jupyter notebook stubhub_tracker.ipynb
 ```
 - Logs into StubHub and searches for specific artists
