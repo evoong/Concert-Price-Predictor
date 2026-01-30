@@ -1,0 +1,9 @@
+selenium
+beautifulsoup4
+requests
+pandas
+googlesearch-python
+# crawl4ai  # Note: Requires Python < 3.13 due to 'cgi' module dependency (htmlmin)
+# scraperai # Note: Requires Python < 3.13 due to 'cgi' module dependency (htmlmin)
+webdriver-manager
+lxml
