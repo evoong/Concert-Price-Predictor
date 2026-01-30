@@ -10,7 +10,6 @@ numpy
 # Machine Learning
 scikit-learn
 tensorflow
-keras
 
 # Visualization
 matplotlib
