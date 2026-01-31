@@ -1,9 +1,24 @@
-selenium
-beautifulsoup4
-requests
-pandas
-googlesearch-python
+
+# Data Cleaning and Analysis
+# Data Collection
+# Jupyter Notebook
+# Machine Learning
+# Visualization
 # crawl4ai  # Note: Requires Python < 3.13 due to 'cgi' module dependency (htmlmin)
 # scraperai # Note: Requires Python < 3.13 due to 'cgi' module dependency (htmlmin)
-webdriver-manager
+beautifulsoup4
+googlesearch-python
+jupyter
+keras
 lxml
+matplotlib
+numpy
+pandas
+psycopg[binary]
+requests
+scikit-learn
+scrapy
+seaborn
+selenium
+tensorflow
+webdriver-manager

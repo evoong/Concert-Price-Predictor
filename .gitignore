@@ -1,3 +1,7 @@
 spotify_credentials.json
 stubhub_login_info.json
-stubhub_credentials.jsonspotify_credentials.json
+stubhub_credentials.json
+postgres_credentials.json
+*.pyc
+__pycache__/
+.DS_Store
