@@ -2,6 +2,13 @@ spotify_credentials.json
 stubhub_login_info.json
 stubhub_credentials.json
 postgres_credentials.json
+gemini_credentials.json
+failed_scrapes.csv
+failed_scrapes.numbers
+last_error_log.csv
+last_session_summary.csv
+last_error_log_with_retries.csv
 *.pyc
 __pycache__/
 .DS_Store
+*.db
