@@ -1,9 +1,10 @@
 let allArtists = [];
 let columns = [];
-let visibleColumns = ['name', 'last_error', 'instagram_followers', 'spotify_followers', 'spotify_listeners', 'twitter_followers', 'updated_at'];
+let visibleColumns = ['name', 'instagram_followers', 'spotify_followers', 'spotify_listeners', 'twitter_followers', 'updated_at'];
 let sortCol = 'updated_at';
 let sortDir = 'desc';
 let draggedCol = null;
+let selectedRows = new Set();
 
 function showToast(message, type = 'success') {
     const container = document.getElementById('toast-container');
@@ -184,18 +185,151 @@ function getSafeId(name) {
     return 'id-' + btoa(name).replace(/[^a-zA-Z0-9]/g, '');
 }
 
+function removeColumn(col) {
+    visibleColumns = visibleColumns.filter(c => c !== col);
+    sortAndRender();
+    renderColumnPicker();
+}
+
+function toggleRowSelection(name) {
+    if (selectedRows.has(name)) {
+        selectedRows.delete(name);
+    } else {
+        selectedRows.add(name);
+    }
+    updateBulkActionsBar();
+    updateCheckboxStates();
+}
+
+function toggleSelectAll(checked) {
+    const visibleArtists = getFilteredArtists();
+    if (checked) {
+        visibleArtists.forEach(a => selectedRows.add(a.name));
+    } else {
+        selectedRows.clear();
+    }
+    updateBulkActionsBar();
+    updateCheckboxStates();
+}
+
+function getFilteredArtists() {
+    const query = document.getElementById('artist-filter').value.toLowerCase();
+    return allArtists.filter(a => a.name.toLowerCase().includes(query));
+}
+
+function updateCheckboxStates() {
+    document.querySelectorAll('.row-checkbox').forEach(cb => {
+        cb.checked = selectedRows.has(cb.dataset.name);
+    });
+    const selectAllCb = document.getElementById('select-all-cb');
+    if (selectAllCb) {
+        const visibleArtists = getFilteredArtists();
+        selectAllCb.checked = visibleArtists.length > 0 && visibleArtists.every(a => selectedRows.has(a.name));
+    }
+}
+
+function updateBulkActionsBar() {
+    let bar = document.getElementById('bulk-actions-bar');
+    if (selectedRows.size === 0) {
+        if (bar) bar.style.display = 'none';
+        return;
+    }
+    if (!bar) {
+        bar = document.createElement('div');
+        bar.id = 'bulk-actions-bar';
+        bar.className = 'bulk-actions-bar';
+        document.querySelector('.content-wrapper').prepend(bar);
+    }
+    bar.style.display = 'flex';
+    bar.innerHTML = `
+        <span class="bulk-count">${selectedRows.size} selected</span>
+        <button class="bulk-btn bulk-refresh" onclick="bulkRefresh()">🔄 Refresh Selected</button>
+        <button class="bulk-btn bulk-delete" onclick="bulkDelete()">🗑️ Delete Selected</button>
+        <button class="bulk-btn bulk-clear" onclick="clearSelection()">✕ Clear</button>
+    `;
+}
+
+function clearSelection() {
+    selectedRows.clear();
+    updateBulkActionsBar();
+    updateCheckboxStates();
+}
+
+async function bulkDelete() {
+    const count = selectedRows.size;
+    if (!confirm(`Delete ${count} artist(s)? This cannot be undone.`)) return;
+
+    const names = [...selectedRows];
+    let deleted = 0;
+    for (const name of names) {
+        try {
+            const res = await fetch('/api/delete_artist', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name })
+            });
+            if (res.ok) deleted++;
+        } catch (e) { }
+    }
+    selectedRows.clear();
+    showToast(`Deleted ${deleted} artist(s)`);
+    fetchArtists();
+}
+
+async function bulkRefresh() {
+    const names = [...selectedRows];
+    showToast(`Starting refresh for ${names.length} artist(s)...`, 'info');
+    for (const name of names) {
+        fetch('/api/refresh', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name })
+        });
+    }
+    setTimeout(() => {
+        fetchArtists();
+        showToast(`Refresh complete for ${names.length} artist(s)`);
+    }, 10000);
+}
+
 function renderTable(artists) {
     const thead = document.getElementById('table-head');
     const tbody = document.getElementById('artist-tbody');
 
     thead.innerHTML = '';
+
+    // Checkbox column header
+    const checkTh = document.createElement('th');
+    checkTh.className = 'checkbox-col';
+    const selectAllCb = document.createElement('input');
+    selectAllCb.type = 'checkbox';
+    selectAllCb.id = 'select-all-cb';
+    selectAllCb.title = 'Select all';
+    selectAllCb.onchange = () => toggleSelectAll(selectAllCb.checked);
+    checkTh.appendChild(selectAllCb);
+    thead.appendChild(checkTh);
+
     visibleColumns.forEach(col => {
         const th = document.createElement('th');
-        th.textContent = formatLabel(col);
         th.draggable = true;
 
+        const labelSpan = document.createElement('span');
+        labelSpan.textContent = formatLabel(col);
+        labelSpan.className = 'col-label';
+        th.appendChild(labelSpan);
+
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'col-remove-btn';
+        removeBtn.textContent = '×';
+        removeBtn.title = 'Remove column';
+        removeBtn.onclick = (e) => {
+            e.stopPropagation();
+            removeColumn(col);
+        };
+        th.appendChild(removeBtn);
+
         th.onclick = (e) => {
-            if (e.target === th) handleSort(col);
+            if (e.target === th || e.target === labelSpan) handleSort(col);
         };
 
         th.ondragstart = (e) => handleDragStart(e, col);
@@ -215,6 +349,18 @@ function renderTable(artists) {
         const sid = getSafeId(artist.name);
         const tr = document.createElement('tr');
         tr.id = `row-${sid}`;
+
+        // Checkbox cell
+        const checkTd = document.createElement('td');
+        checkTd.className = 'checkbox-col';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.className = 'row-checkbox';
+        cb.dataset.name = artist.name;
+        cb.checked = selectedRows.has(artist.name);
+        cb.onchange = () => toggleRowSelection(artist.name);
+        checkTd.appendChild(cb);
+        tr.appendChild(checkTd);
 
         visibleColumns.forEach(col => {
             const td = document.createElement('td');
@@ -237,12 +383,15 @@ function renderTable(artists) {
         actTd.className = 'actions-cell';
         actTd.innerHTML = `
             <button class="mini-btn" onclick="refreshArtist('${artist.name}', this)" title="Refresh from Scrapers">🔄</button>
-            <button class="mini-btn btn-save" style="display:none; color: var(--spotify-green);" 
+            <button class="mini-btn btn-save" style="display:none; color: var(--spotify-green);"
                     id="save-${sid}" onclick="saveChanges('${artist.name}', '${sid}', this)" title="Save Changes">💾</button>
+            <button class="mini-btn btn-delete" onclick="deleteArtist('${artist.name}', this)" title="Delete Artist">🗑️</button>
         `;
         tr.appendChild(actTd);
         tbody.appendChild(tr);
     });
+
+    updateBulkActionsBar();
 }
 
 function filterArtists() {
@@ -288,6 +437,30 @@ async function saveChanges(name, sid, btn) {
         console.error('Update failed:', error);
         showToast('Connection error during save', 'error');
         btn.innerHTML = '❌';
+    }
+}
+
+async function deleteArtist(name, btn) {
+    if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+
+    btn.innerHTML = '...';
+    try {
+        const res = await fetch('/api/delete_artist', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: name })
+        });
+        if (res.ok) {
+            showToast(`Deleted ${name}`);
+            fetchArtists();
+        } else {
+            const err = await res.json();
+            showToast(err.error || 'Failed to delete', 'error');
+            btn.innerHTML = '🗑️';
+        }
+    } catch (e) {
+        showToast('Network error during delete', 'error');
+        btn.innerHTML = '🗑️';
     }
 }
 

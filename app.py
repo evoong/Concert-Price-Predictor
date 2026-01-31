@@ -103,5 +103,22 @@ def update_artist():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/delete_artist', methods=['POST'])
+def delete_artist():
+    data = request.json
+    artist_name = data.get('name')
+    if not artist_name:
+        return jsonify({"error": "Artist name required"}), 400
+
+    try:
+        conn = get_db_conn()
+        with conn.cursor() as cur:
+            cur.execute("DELETE FROM ARTISTS WHERE name = %s", (artist_name,))
+            conn.commit()
+        conn.close()
+        return jsonify({"message": f"Deleted {artist_name}"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)

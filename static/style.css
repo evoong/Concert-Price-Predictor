@@ -405,3 +405,96 @@ tr:hover .stat-val-input {
     opacity: 0.3;
     cursor: not-allowed;
 }
+
+/* Column Remove Button */
+th {
+    position: relative;
+}
+
+.col-label {
+    margin-right: 1rem;
+}
+
+.col-remove-btn {
+    position: absolute;
+    right: 0.3rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--text-subdued);
+    font-size: 1rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease, color 0.2s ease;
+    padding: 0 0.3rem;
+}
+
+th:hover .col-remove-btn {
+    opacity: 1;
+}
+
+.col-remove-btn:hover {
+    color: #ff4d4d;
+}
+
+/* Checkbox Column */
+.checkbox-col {
+    width: 40px;
+    text-align: center;
+    cursor: default;
+}
+
+.checkbox-col input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: var(--spotify-green);
+}
+
+/* Bulk Actions Bar */
+.bulk-actions-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 1.2rem;
+    background-color: var(--bg-elevated);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border: 1px solid var(--spotify-green);
+}
+
+.bulk-count {
+    color: var(--spotify-green);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.bulk-btn {
+    background: transparent;
+    border: 1px solid var(--text-subdued);
+    color: var(--text-base);
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: var(--transition);
+}
+
+.bulk-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.bulk-delete:hover {
+    border-color: #ff4d4d;
+    color: #ff4d4d;
+}
+
+.bulk-refresh:hover {
+    border-color: var(--spotify-green);
+    color: var(--spotify-green);
+}
+
+.bulk-clear {
+    margin-left: auto;
+}
