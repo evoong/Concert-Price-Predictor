@@ -19,9 +19,18 @@
             <a class="nav-item"><span>🔍</span> Search</a>
             <a class="nav-item"><span>📚</span> Library</a>
         </nav>
-        <div style="margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
-            <p style="color: var(--text-subdued); font-size: 0.8rem; text-transform: uppercase;">Recently Updated</p>
-            <div id="recent-list" style="margin-top: 1rem;">
+        <div class="sidebar-section">
+            <div class="section-header">
+                <p class="section-title">Filters</p>
+                <button id="clear-filters-btn" class="clear-link" onclick="clearAllFilters()" style="display:none;">Clear</button>
+            </div>
+            <div id="filter-list">
+                <!-- Dynamically filled -->
+            </div>
+        </div>
+        <div class="sidebar-section">
+            <p class="section-title">Recently Updated</p>
+            <div id="recent-list">
                 <!-- Dynamically filled -->
             </div>
         </div>
@@ -67,6 +76,7 @@
                             <option value="25">25 rows</option>
                             <option value="50" selected>50 rows</option>
                             <option value="100">100 rows</option>
+                            <option value="all">All rows</option>
                         </select>
                     </div>
                     <div class="page-controls">

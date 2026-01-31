@@ -438,6 +438,29 @@ th:hover .col-remove-btn {
     color: #ff4d4d;
 }
 
+.col-refresh-btn {
+    position: absolute;
+    right: 1.3rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--text-subdued);
+    font-size: 0.8rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease, color 0.2s ease;
+    padding: 0 0.2rem;
+}
+
+th:hover .col-refresh-btn {
+    opacity: 1;
+}
+
+.col-refresh-btn:hover {
+    color: var(--spotify-green);
+}
+
 /* Checkbox Column */
 .checkbox-col {
     width: 40px;
@@ -497,4 +520,99 @@ th:hover .col-remove-btn {
 
 .bulk-clear {
     margin-left: auto;
+}
+
+/* Sidebar Sections */
+.sidebar-section {
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.section-title {
+    color: var(--text-subdued);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+.clear-link {
+    background: none;
+    border: none;
+    color: var(--spotify-green);
+    font-size: 0.75rem;
+    cursor: pointer;
+    padding: 0;
+}
+
+.clear-link:hover {
+    text-decoration: underline;
+}
+
+/* Filter Items */
+#filter-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.filter-label {
+    font-size: 0.75rem;
+    color: var(--text-subdued);
+}
+
+.filter-select {
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.4rem 0.5rem;
+    color: var(--text-base);
+    font-size: 0.8rem;
+    outline: none;
+    cursor: pointer;
+}
+
+.filter-select:focus {
+    border-color: var(--spotify-green);
+}
+
+.filter-input {
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.4rem 0.5rem;
+    color: var(--text-base);
+    font-size: 0.8rem;
+    outline: none;
+}
+
+.filter-input:focus {
+    border-color: var(--spotify-green);
+}
+
+.filter-input::placeholder {
+    color: var(--text-subdued);
+    opacity: 0.6;
+}
+
+#recent-list p {
+    font-size: 0.9rem;
+    padding: 0.2rem 0;
+    color: var(--text-subdued);
 }

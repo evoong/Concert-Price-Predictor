@@ -45,15 +45,20 @@ def get_artists():
 def refresh_artist():
     data = request.json
     artist_name = data.get('name')
+    source = data.get('source')  # Optional: instagram, twitter, spotify, stubhub
     if not artist_name:
         return jsonify({"error": "Artist name required"}), 400
-        
+
     try:
         # Run the scraper script in the background
         # Note: In a production environment, this should be a task queue (e.g. Celery)
         # For this demo, we'll run it and return success immediately if it starts
-        subprocess.Popen(['python3', 'api_scraper.py', artist_name])
-        return jsonify({"message": f"Refresh triggered for {artist_name}"}), 202
+        if source and source in ['instagram', 'twitter', 'spotify', 'stubhub']:
+            subprocess.Popen(['python3', 'api_scraper.py', artist_name, source])
+            return jsonify({"message": f"Refresh {source} triggered for {artist_name}"}), 202
+        else:
+            subprocess.Popen(['python3', 'api_scraper.py', artist_name])
+            return jsonify({"message": f"Refresh triggered for {artist_name}"}), 202
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
