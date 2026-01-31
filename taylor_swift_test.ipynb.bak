@@ -11,7 +11,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 9,
+   "execution_count": 1,
    "id": "aaadc85f",
    "metadata": {},
    "outputs": [
@@ -19,8 +19,24 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "✨ Gemini AI initialized.\n",
-      "📦 Libraries loaded (v4.0 Modular).\n"
+      "\ud83d\udce6 Libraries loaded (v4.0 Foundation).\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html\n",
+      "  from .autonotebook import tqdm as notebook_tqdm\n",
+      "/var/folders/9h/ghtl82dn5bvgn2ck1qdxgf9m0000gp/T/ipykernel_27275/2180024096.py:18: FutureWarning: \n",
+      "\n",
+      "All support for the `google.generativeai` package has ended. It will no longer be receiving \n",
+      "updates or bug fixes. Please switch to the `google.genai` package as soon as possible.\n",
+      "See README for more details:\n",
+      "\n",
+      "https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n",
+      "\n",
+      "  import google.generativeai as genai\n"
      ]
     }
    ],
@@ -35,51 +51,41 @@
     "import numpy as np\n",
     "import scrapers\n",
     "from scrapers import InstagramProfile, TwitterProfile, SpotifyProfile, StubhubProfile\n",
-    "from selenium import webdriver\n",
-    "from selenium.webdriver.chrome.options import Options\n",
-    "\n",
-    "# Gemini AI Setup\n",
     "try:\n",
-    "    with open(\"gemini_credentials.json\", \"r\") as f:\n",
-    "        creds = json.load(f)\n",
     "    import google.generativeai as genai\n",
-    "    genai.configure(api_key=creds[\"api_key\"])\n",
-    "    model = genai.GenerativeModel('gemini-1.5-flash')\n",
     "    HAS_GEMINI = True\n",
-    "    print(\"✨ Gemini AI initialized.\")\n",
-    "except Exception as e:\n",
-    "    print(f\"⚠️ Gemini AI not initialized: {e}\")\n",
+    "except ImportError:\n",
     "    HAS_GEMINI = False\n",
-    "    model = None\n",
     "\n",
-    "print(\"📦 Libraries loaded (v4.0 Modular).\")"
+    "print(\"\ud83d\udce6 Libraries loaded (v4.0 Modular).\")"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 10,
+   "execution_count": 3,
    "id": "9e42484a",
    "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "🌐 Selenium WebDriver initialized.\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
     "# Initialize Selenium WebDriver\n",
     "options = webdriver.ChromeOptions()\n",
     "# options.add_argument('--headless')  # Uncomment to run in headless mode\n",
-    "driver = webdriver.Chrome(options=options)\n",
-    "print(\"🌐 Selenium WebDriver initialized.\")"
+    "driver = webdriver.Chrome(options=options)"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 11,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Initialize modular scrapers with ready globals\n",
+    "scrapers.set_globals(driver, model, headers if 'headers' in globals() else {})\n",
+    "print('\ud83d\udfe2 Scraper globals initialized.')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
    "id": "spotify_creds",
    "metadata": {},
    "outputs": [
@@ -133,26 +139,6 @@
    ]
   },
   {
-   "cell_type": "code",
-   "execution_count": 12,
-   "id": "76c3fa38",
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "🟢 Scraper globals initialized.\n"
-     ]
-    }
-   ],
-   "source": [
-    "# Initialize modular scrapers with ready globals\n",
-    "scrapers.set_globals(driver, model, headers if 'headers' in globals() else {})\n",
-    "print('🟢 Scraper globals initialized.')"
-   ]
-  },
-  {
    "cell_type": "markdown",
    "id": "class_definitions",
    "metadata": {},
@@ -170,42 +156,42 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 13,
+   "execution_count": 11,
    "id": "run_full_test",
    "metadata": {},
    "outputs": [],
    "source": [
     "def run_full_test(artist_name, ig_user=None, tw_user=None, spot_id=None, stub_url=None):\n",
     "    print(f\"\\n{'='*50}\")\n",
-    "    print(f\"🚀 TESTING: {artist_name}\")\n",
+    "    print(f\"\ud83d\ude80 TESTING: {artist_name}\")\n",
     "    print(f\"{'='*50}\\n\")\n",
     "    \n",
     "    # 1. Instagram\n",
     "    ig = InstagramProfile(artist_name, username=ig_user)\n",
     "    ig.get_all()\n",
-    "    print(f\"\\n📸 Instagram Result: {ig.username} | {ig.follower_count:,} followers\")\n",
+    "    print(f\"\\n\ud83d\udcf8 Instagram Result: {ig.username} | {ig.follower_count:,} followers\")\n",
     "    \n",
     "    # 2. Twitter\n",
     "    tw = TwitterProfile(artist_name, username=tw_user)\n",
     "    tw.get_all()\n",
-    "    print(f\"\\n🐦 Twitter Result: {tw.username} | {tw.follower_count:,} followers\")\n",
+    "    print(f\"\\n\ud83d\udc26 Twitter Result: {tw.username} | {tw.follower_count:,} followers\")\n",
     "    \n",
     "    # 3. Spotify\n",
     "    sp = SpotifyProfile(artist_name, spotifyID=spot_id)\n",
     "    sp.get_all()\n",
-    "    print(f\"\\n🎧 Spotify Result: {sp.spotifyID} | {sp.followers:,} followers | Listeners: {sp.listens:,} | Popularity: {sp.popularity} | Genre: {sp.genre}\")\n",
+    "    print(f\"\\n\ud83c\udfa7 Spotify Result: {sp.spotifyID} | {sp.followers:,} followers | Listeners: {sp.listens:,} | Popularity: {sp.popularity} | Genre: {sp.genre}\")\n",
     "    \n",
     "    # 4. Stubhub\n",
     "    sh = StubhubProfile(artist_name, url=stub_url)\n",
     "    sh.get_all()\n",
-    "    print(f\"\\n🎟️ Stubhub Result: {sh.url} | {sh.favourites:,} favourites\")\n",
+    "    print(f\"\\n\ud83c\udf9f\ufe0f Stubhub Result: {sh.url} | {sh.favourites:,} favourites\")\n",
     "    \n",
     "    return ig, tw, sp, sh"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 14,
+   "execution_count": 12,
    "id": "execute_test",
    "metadata": {},
    "outputs": [
@@ -215,17 +201,17 @@
      "text": [
       "\n",
       "==================================================\n",
-      "🚀 TESTING: Taylor Swift\n",
+      "\ud83d\ude80 TESTING: Taylor Swift\n",
       "==================================================\n",
       "\n",
       "\n",
-      "📸 Instagram Result: taylorswift | 280,938,944 followers\n",
+      "\ud83d\udcf8 Instagram Result: taylorswift | 280,942,001 followers\n",
       "\n",
-      "🐦 Twitter Result: taylorswift13 | 78,800,000 followers\n",
+      "\ud83d\udc26 Twitter Result: taylorswift13 | 78,800,000 followers\n",
       "\n",
-      "🎧 Spotify Result: 6fxyWrfmjcbj5d12gXeiNV | 2,901,850 followers | Listeners: 7,600,000 | Popularity: 72 | Genre: None\n",
+      "\ud83c\udfa7 Spotify Result: 06HL4z0CvFAxyc27GXpf02 | 150,801,542 followers | Listeners: 105,900,000 | Popularity: 100 | Genre: Pop\n",
       "\n",
-      "🎟️ Stubhub Result: https://www.stubhub.com/taylor-swift-tickets/performer/136034 | 62,300 favourites\n",
+      "\ud83c\udf9f\ufe0f Stubhub Result: https://www.stubhub.com/taylor-swift-tickets/performer/136034 | 62,300 favourites\n",
       "\n",
       "Expected values (as of Jan 2026):\n",
       "  Instagram: ~281M followers\n",
@@ -241,7 +227,7 @@
     "    \"Taylor Swift\", \n",
     "    ig_user=\"taylorswift\", \n",
     "    tw_user=\"taylorswift13\", \n",
-    "    spot_id=\"6fxyWrfmjcbj5d12gXeiNV\",\n",
+    "    spot_id=\"06HL4z0CvFAxyc27GXpf02\",\n",
     "    stub_url=\"https://www.stubhub.com/taylor-swift-tickets/performer/136034\"\n",
     ")\n",
     "\n",
@@ -262,7 +248,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 15,
+   "execution_count": 13,
    "id": "summary_output",
    "metadata": {},
    "outputs": [
@@ -275,16 +261,27 @@
       "==================================================\n",
       "\n",
       "INSTAGRAM:\n",
-      "<scrapers.InstagramProfile object at 0x1146d78c0>\n",
+      "Artist: Taylor Swift\n",
+      "Instagram Username: taylorswift\n",
+      "Followers: 280,942,001\n",
       "\n",
       "TWITTER/X:\n",
-      "<scrapers.TwitterProfile object at 0x10a40a900>\n",
+      "Artist: Taylor Swift\n",
+      "Twitter Username: taylorswift13\n",
+      "Followers: 78,800,000\n",
       "\n",
       "SPOTIFY:\n",
-      "<scrapers.SpotifyProfile object at 0x1146d7cb0>\n",
+      "Artist: Taylor Swift\n",
+      "Spotify ID: 06HL4z0CvFAxyc27GXpf02\n",
+      "Genre: Pop\n",
+      "Followers: 150,801,542\n",
+      "Popularity: 100\n",
+      "Monthly Listeners: 105,900,000\n",
       "\n",
       "STUBHUB:\n",
-      "<scrapers.StubhubProfile object at 0x1146d7b60>\n",
+      "Artist: Taylor Swift\n",
+      "Stubhub URL: https://www.stubhub.com/taylor-swift-tickets/performer/136034\n",
+      "Favourites: 62,300\n",
       "\n",
       "==================================================\n"
      ]
@@ -313,7 +310,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 16,
+   "execution_count": 14,
    "id": "cleanup",
    "metadata": {},
    "outputs": [

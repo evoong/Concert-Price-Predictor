@@ -1,0 +1,11 @@
+Flask
+mysql-connector-python
+pandas
+numpy
+beautifulsoup4
+googlesearch-python
+requests
+selenium
+webdriver-manager
+google-generativeai
+httpx

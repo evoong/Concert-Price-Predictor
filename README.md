@@ -8,6 +8,9 @@ Welcome to the Concert Price Predictor! This project is designed to help you pre
 - **Data Analysis**: Analyze price trends and patterns.
 - **Model Training**: Train machine learning models to predict ticket prices.
 - **Prediction**: Predict future ticket prices based on the trained models.
+- **Web Dashboard**: Modern, glassmorphism UI to monitor artist social metrics in real-time.
+- **One-Click Refresh**: Trigger background scraping directly from the browser.
+- **Docker Ready**: Fully containerized for easy deployment.
 
 ## Technologies and Libraries Used
 

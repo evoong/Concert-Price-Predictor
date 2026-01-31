@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socials Manager | Spotify Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="toast-container" class="toast-container"></div>
+    <aside class="sidebar">
+        <div class="logo-section">
+            <h1 style="font-size: 1.5rem; color: var(--spotify-green);">Socials Manager</h1>
+        </div>
+        <nav>
+            <a class="nav-item active"><span>🏠</span> Home</a>
+            <a class="nav-item"><span>🔍</span> Search</a>
+            <a class="nav-item"><span>📚</span> Library</a>
+        </nav>
+        <div style="margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+            <p style="color: var(--text-subdued); font-size: 0.8rem; text-transform: uppercase;">Recently Updated</p>
+            <div id="recent-list" style="margin-top: 1rem;">
+                <!-- Dynamically filled -->
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-view">
+        <header>
+            <div class="header-actions">
+                <input type="text" id="artist-filter" placeholder="What do you want to find?" oninput="filterArtists()">
+            </div>
+            <div class="header-actions">
+                <div class="column-picker-container">
+                    <button class="picker-btn" onclick="toggleColumnPicker()">Columns ⚙️</button>
+                    <div id="column-dropdown" class="column-dropdown">
+                        <!-- Checkboxes will be injected here -->
+                    </div>
+                </div>
+                <button class="spotify-btn" onclick="refreshAll()">Refresh All</button>
+            </div>
+        </header>
+
+        <section class="content-wrapper">
+            <div class="hero-section">
+                <h1 id="view-title">Artists</h1>
+            </div>
+
+            <div class="table-container">
+                <table id="artist-table">
+                    <thead>
+                        <tr id="table-head">
+                            <!-- Headers will be injected here -->
+                        </tr>
+                    </thead>
+                    <tbody id="artist-tbody">
+                        <!-- Data will be injected here -->
+                    </tbody>
+                </table>
+                <div class="pagination-footer">
+                    <div class="page-size-selector">
+                        <span>Show:</span>
+                        <select id="page-size" onchange="changePageSize()">
+                            <option value="10">10 rows</option>
+                            <option value="25">25 rows</option>
+                            <option value="50" selected>50 rows</option>
+                            <option value="100">100 rows</option>
+                        </select>
+                    </div>
+                    <div class="page-controls">
+                        <button class="nav-btn" onclick="prevPage()">‹ Previous</button>
+                        <span id="page-indicator">Page 1 of 1</span>
+                        <button class="nav-btn" onclick="nextPage()">Next ›</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

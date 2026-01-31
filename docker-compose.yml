@@ -1,0 +1,11 @@
+services:
+  socials-tracker-ui:
+    build: .
+    ports:
+      - "5001:5001"
+    volumes:
+      - .:/app
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "bootyhole:100.78.79.124"
+    restart: unless-stopped
